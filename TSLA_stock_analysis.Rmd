@@ -191,6 +191,10 @@ An observation of the fitted values compared to their residuals demonstrates a p
 
 ##\n\n
 
+The overall adjusted R-squared is 0.9952. This indicates that a high percentage of variation in Tesla stock prices are explained by our model. All the coefficients are statistically significant at the 95% confidence level. The F-statistic also allows us to reject the null that the overall model is not significant.
+
+##\n\n
+
 #### The Full Model Forecast
 ```{r results='hold',message=FALSE}
 plot(predict(full_m$fitted.values, h=24) ,shadecols="oldstyle", main="TSLA Stock Full Forecast", xlab="Year", ylab="Log-Adjusted Closing Price (in $)", lwd=2, col=1, ylim=c(2.75, 6))
