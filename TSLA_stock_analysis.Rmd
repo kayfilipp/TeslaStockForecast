@@ -50,6 +50,12 @@ names(tsla)=c("date","open","high","low","close","adjClose","Volume")
 attach(tsla)
 #we'll be working with adjusted closing price and the data is weekly
 tsla_ts<-ts(tsla$adjClose, start = 2010.5, frequency=52)
+t<-seq(length=length(tsla_ts))
+t2<-t^2
+t3<-t^3
+t4<-t^4
+t5<-t^5
+ltsla_ts<- log(tsla_ts)
 
 plot(tsla_ts, xlab="Year", ylab="Adjusted Closing Price (in $)", main="TSLA Stock")
 tsdisplay(tsla_ts, main="TSLA Stock", xlab="Year", ylab="Adjusted Closing Price (in $)")
@@ -66,23 +72,45 @@ TODO: write initial analysis based on above plot
 
 #### Initial Model building
 ```{r results='hold',message=FALSE}
-# 1-week laggling linear model
-lin_m<- dynlm(tsla_ts ~ L(tsla_ts,1))
+# linear model
+lin_m<- dynlm(tsla_ts ~ t)
 plot(tsla_ts,lwd=2, col=1, main="TSLA Stock Linear Model Fit", xlab="Year", ylab="Adjusted Closing Price (in $)")
-lines(lin_m$fitted.values,col='red3',lwd=2)
-legend('bottomright', legend=c("Actual Value", "Linear Model Fit"), col=c(1, "red3"), lwd=2)
+lines(lin_m$fitted.values ,col=2,lwd=2)
+legend('bottomright', legend=c("Actual Value", "Linear Model Fit"), col=1:2, lwd=2)
 
 # non-linear model
-nl_m<- dynlm(tsla_ts ~ L(tsla_ts,1) + I(L(tsla_ts,1)^2))
-plot(tsla_ts,lwd=2, col="black", main="TSLA Stock Non-Linear Model Fit", xlab="Year", ylab="Adjusted Closing Price (in $)")
+nl_m<- dynlm(ltsla_ts ~ t + t2+ t3)
+plot(ltsla_ts,lwd=2, col="black", main="TSLA Stock Non-Linear Model Fit", xlab="Year", ylab="log-Adjusted Closing Price (in $)")
 lines(nl_m$fitted.values,col='blue3',lwd=2)
-legend('bottomright', legend=c("Actual Value", "Non-Linear Model Fit"), col=c("black", "blue3"))
-summary(lin_m)
-summary(nl_m)
-
+legend('bottomright', legend=c("Actual Value", "Non-Linear Model Fit"), col=c("black", "blue3"),lwd=2)
 ```
 
+##\n\n
 
+#### Initial Model Diagnostics and Selection
+```{r results='hold',message=FALSE}
+
+# linear model
+plot(y=lin_m$residuals, x=lin_m$fitted.values,lwd=2, col=1, main="TSLA Linear Model", xlab="Fitted Values", ylab="Residuals")
+truehist(lin_m$residuals,col='gray80',main="TSLA Linear Model", ylab="Fraction", xlab="Residuals")
+summary(lin_m)
+
+
+# non-linear model
+plot(y=nl_m$residuals, x=nl_m$fitted.values,lwd=2, col=1, main="TSLA Non-Linear Model", xlab="Fitted Values", ylab="Residuals")
+truehist(nl_m$residuals,col='gray80',main="TSLA Non-Linear Model", ylab="Fraction", xlab="Residuals")
+summary(nl_m)
+
+AIC(lin_m,nl_m)
+BIC(lin_m,nl_m)
+```
+"""
+
+TODO: Analyze the above plots and answer 1.e, 1.f, 1.g and 1.h
+
+NOTE: the scale for the residulas are vastly differnt!
+
+"""
 
 ```{r results='hold',message=FALSE}
 
