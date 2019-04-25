@@ -146,7 +146,7 @@ legend('bottomright', legend=c( "Model+Forcast","Actual Value"), col=1:2, lwd=2)
 #### Initial Data Exploration
 
 ```{r results='hold',message=FALSE}
-#2a,b,c,d,d: construct a model with a full set set of seasonal dummies, plot the seasonal factors, interpret plot, add trend from problem 1, interpret the summary, do h-step forecast (h>16)
+#2a,b,c,d,e: construct a model with a full set set of seasonal dummies, plot the seasonal factors, interpret plot, add trend from problem 1, interpret the summary, do h-step forecast (h>16)
 #recall that nl_m<- dynlm(ltsla_ts ~ t + t2 + t3)
 seasonal_m<-tslm(ltsla_ts ~ season+0)
 plot(seasonal_m$coefficients,xlab="Week",ylab="Seasonal Coefficient")
@@ -157,5 +157,9 @@ The interpretation of this coefficient plot heavily suggests a pattern in stock 
 m_final<-tslm(ltsla_ts~0+season+t + t2 + t3)
 #then we plot the residuals vs fitted values 
 plot(y=m_final$residuals,x=m_final$fitted.values,ylab="Residuals",xlab="fitted values")
+```
+An observation of the fitted values compared to their residuals demonstrates a periodic trend, roughly equivalent to a sine wave, suggesting that the nonlinear model combined with the seasonal component has not entirely identified the stochastic trend that determines Tesla stock prices.
+```{r}
+summary(m_final)
 ```
 
