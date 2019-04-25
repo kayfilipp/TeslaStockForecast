@@ -79,8 +79,8 @@ lines(lin_m$fitted.values ,col=2,lwd=2)
 legend('bottomright', legend=c("Actual Value", "Linear Model Fit"), col=1:2, lwd=2)
 
 # non-linear model
-nl_m<- dynlm(ltsla_ts ~ t + t2+ t3)
-plot(ltsla_ts,lwd=2, col="black", main="TSLA Stock Non-Linear Model Fit", xlab="Year", ylab="log-Adjusted Closing Price (in $)")
+nl_m<- dynlm(ltsla_ts ~ t + t2 + t3)
+plot(ltsla_ts,lwd=2, col="black", main="TSLA Stock Non-Linear Model Fit", xlab="Year", ylab="Log-Adjusted Closing Price (in $)")
 lines(nl_m$fitted.values,col='blue3',lwd=2)
 legend('bottomright', legend=c("Actual Value", "Non-Linear Model Fit"), col=c("black", "blue3"),lwd=2)
 ```
@@ -112,8 +112,14 @@ NOTE: the scale for the residulas are vastly differnt!
 
 """
 
-```{r results='hold',message=FALSE}
+##\n\n
 
+#### Non-Linear Model Forcast
+We are going to do a 24-steps forcast using our Non-Linear model above. This should predict the weekly Tesla adjusted closing price for the next 6 months.
+```{r results='hold',message=FALSE}
+plot(forecast(nl_m$fitted.values ,h=24) ,shadecols="oldstyle", main="TSLA Stock Non-Linear Model Forcast", xlab="Year", ylab="Log-Adjusted Closing Price (in $)",lwd=2, col=1)
+lines(ltsla_ts,lwd=2, col=2)
+legend('bottomright', legend=c( "Model+Forcast","Actual Value"), col=1:2, lwd=2)
 ```
 
 
