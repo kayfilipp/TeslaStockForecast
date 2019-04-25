@@ -143,19 +143,45 @@ legend('bottomright', legend=c( "Model+Forcast","Actual Value"), col=1:2, lwd=2)
 
 ### Modeling and Forecasting Seasonality
 
-#### Initial Data Exploration
+#### Seasonal Model Building and Analysis
 
 ```{r results='hold',message=FALSE}
-#2a,b,c,d,d: construct a model with a full set set of seasonal dummies, plot the seasonal factors, interpret plot, add trend from problem 1, interpret the summary, do h-step forecast (h>16)
-#recall that nl_m<- dynlm(ltsla_ts ~ t + t2 + t3)
-seasonal_m<-tslm(ltsla_ts ~ season+0)
-plot(seasonal_m$coefficients,xlab="Week",ylab="Seasonal Coefficient")
+seas_m=tslm(tsla_ts~season+0)
+summary(seas_m)
+plot(seas_m$coefficients, xlab="Week", ylab="Co-effecient Value",main="Seasonality Models Weights", type="o",lwd=2)
+
+#Some seasonal decompositions to better understand seasonality
+ggsubseriesplot(tsla_ts ,ylab="Adjusted Closing Price (in $)", xlab="Week") +
+  ggtitle("TSLA Stock(w/ ggsubseriesplot()")
+ggseasonplot(tsla_ts ,ylab="Adjusted Closing Price (in $)", xlab="Week") +
+  ggtitle("TSLA Stock(w/ ggsubseriesplot()")
+stl(tsla_ts,s.window=52) %>% autoplot() +
+  ggtitle("STL decomposition of Candian Gas Price")
 ```
+"""
+
+TODO: - Comfirm we did 2.a and 2.b correctly
+"""
 The interpretation of this coefficient plot heavily suggests a pattern in stock price growth; a face-value analysis shows us that prices growth during the first half of each year (weeks 0-26) and then drop abruptly in the second half of the year. A continuation of this plot, however, into the next year, would suggest that growth occurs between ~week 30 of year i and week 30 of year i+1. Overall, the plot suggests a clear upward trend for Tesla stock prices.
 
+##\n\n
+
+#### The Full Model
+
 ```{r results='hold',message=FALSE}
-m_final<-tslm(ltsla_ts~0+season+t + t2 + t3)
-#then we plot the residuals vs fitted values 
-plot(y=m_final$residuals,x=m_final$fitted.values,ylab="Residuals",xlab="fitted values")
+full_m<-tslm(ltsla_ts~ t + t2 + t3 + season + 0)
+
+#model performance statistics
+plot(ltsla_ts,lwd=2, col=1, main="TSLA Stock Full Model Fit", xlab="Year", ylab="Log-Adjusted Closing Price (in $)")
+lines(full_m$fitted.values ,col=2,lwd=2)
+legend('bottomright', legend=c("Actual Value", "Full Model Fit"), col=1:2, lwd=2)
+plot(y=full_m$residuals,x=full_m$fitted.values,ylab="Residuals",xlab="fitted values", main="TSLA Full Model")
+truehist(full_m$residuals,col='gray80',main="TSLA Full Model", ylab="Fraction", xlab="Residuals")
+summary(full_m)
 ```
 
+"""
+
+TODO: - do word answers for 2.b, 2.c and 2.d
+
+"""
