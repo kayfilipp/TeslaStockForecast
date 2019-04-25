@@ -174,11 +174,11 @@ The interpretation of this coefficient plot heavily suggests a pattern in stock 
 
 ```{r results='hold',message=FALSE}
 #cut data
-fmltsla_ts=window(ltsla_ts,2010,c(2018,10))
-frltsla_ts=window(ltsla_ts,c(2018,11),c(2019,19))
-fmt=t[1:400]
-fmt2=t2[1:400]
-fmt3=t3[1:400]
+fmltsla_ts=window(ltsla_ts,2010,c(2019,7))
+frltsla_ts=window(ltsla_ts,c(2019,8),c(2019,19))
+fmt=t[1:449]
+fmt2=t2[1:449]
+fmt3=t3[1:449]
 full_m<-tslm(fmltsla_ts~ fmt + fmt2 + fmt3 + season + 0)
 
 #model performance statistics
@@ -202,13 +202,13 @@ The TSLA full model residuals still contain structure, demonstrating a periodic 
 
 ##\n\n
 
-The overall adjusted R-squared is 0.9952. This indicates that a high percentage of variation in Tesla stock prices are explained by our model. All the coefficients are statistically significant at the 95% confidence level. The F-statistic 1723 on 55 and 406 Degrees of freedom with a p-value much smaller than 1, allows us to reject the null that the overall model is not significant. The AIC and BIC of the full model pose an issue because both results are greater than AIC and BIC for the nonlinear trend alone which suggest our full model is weaker.
+The overall adjusted R-squared is 0.9952. This indicates that a high percentage of variation in Tesla stock prices are explained by our model. All the coefficients are statistically significant at the 95% confidence level. The F-statistic 1723 on 55 and 406 Degrees of freedom with a p-value much smaller than 1, allows us to reject the null that the overall model is not significant.
 
 ##\n\n
 
 #### The Full Model Forecast
 ```{r results='hold',message=FALSE}
-plot(predict(full_m$fitted.values, h=61) ,shadecols="oldstyle", main="TSLA Stock Full Forecast", xlab="Year", ylab="Log-Adjusted Closing Price (in $)", lwd=2, col=1, ylim=c(2.75, 6))
+plot(predict(full_m$fitted.values, h=24) ,shadecols="oldstyle", main="TSLA Stock Full Forecast", xlab="Year", ylab="Log-Adjusted Closing Price (in $)", lwd=2, col=1, ylim=c(2.75, 6))
 lines(ltsla_ts,lwd=2, col=2)
 legend('bottomright', legend=c( "Model+Forecast","Actual Value"), col=1:2, lwd=2)
 ```
