@@ -215,10 +215,10 @@ The overall adjusted R-squared is 0.9952. This indicates that a high percentage 
 
 #### The Full Model Forecast
 ```{r results='hold',message=FALSE}
-plot(predict(full_m$fitted.values, h=24) ,shadecols="oldstyle", main="TSLA Stock Full Forecast", xlab="Year", ylab="Log-Adjusted Closing Price (in $)", lwd=2, col=1, ylim=c(2.75, 6))
+plot(predict(full_m$fitted.values, h=24,level=c(80,99)) ,shadecols="oldstyle", main="TSLA Stock Full Forecast", xlab="Year", ylab="Log-Adjusted Closing Price (in $)", lwd=2, col=1, ylim=c(2.75, 6))
 lines(ltsla_ts,lwd=2, col=2)
 legend('bottomright', legend=c( "Model+Forecast","Actual Value"), col=1:2, lwd=2)
-legend(3.5,2019,legend=c(""))
+legend(3.5,2019,legend=c("80 conf","99 conf"),lty=(1,1),col=c("red","orange"))
 
 ```
 
