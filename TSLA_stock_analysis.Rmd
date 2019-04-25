@@ -38,12 +38,12 @@ Over the past few years developments in electric car technology and batteries ha
 
 ##\n\n
 
-We chose to model and forecast the weekly adjusted closing price of Tesla stock over a 9 year period. We chose weekly data over daily data to avoid short term noise in higher frequency trading, as well as to make accurate trend and seasonality measures.
+We chose to model and forecast the weekly adjusted closing price of Tesla stock over a 9 year period. We chose weekly data over daily data to avoid short term noise in higher frequency trading, as well as to make accurate trend and seasonality measures. 
 
 
 ##\n\n
 
-### Results
+## Results
 
 #### Initial Data Exploration
 
@@ -211,6 +211,8 @@ The overall adjusted R-squared is 0.9952. This indicates that a high percentage 
 plot(predict(full_m$fitted.values, h=24) ,shadecols="oldstyle", main="TSLA Stock Full Forecast", xlab="Year", ylab="Log-Adjusted Closing Price (in $)", lwd=2, col=1, ylim=c(2.75, 6))
 lines(ltsla_ts,lwd=2, col=2)
 legend('bottomright', legend=c( "Model+Forecast","Actual Value"), col=1:2, lwd=2)
+legend(3.5,2019,legend=c(""))
+
 ```
 
 ##\n\n
