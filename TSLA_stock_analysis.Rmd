@@ -231,7 +231,14 @@ In order to improve the model in the future, we could try to fit an ARIMA model 
 ### References
 """
 
-TODO: - Fill in References here
-      - make better comment for large chunks of code
+Sources:
+Yahoo Finance
+https://finance.yahoo.com/quote/TSLA/
+
+Rob Hyndman, working with daily data
+https://robjhyndman.com/hyndsight/dailydata/
+
+R Documentation: TSLM
+https://www.rdocumentation.org/packages/forecast/versions/8.5/topics/tslm
 
 """
