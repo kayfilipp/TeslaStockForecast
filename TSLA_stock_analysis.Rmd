@@ -1,0 +1,97 @@
+---
+title: "Econ144 Project1"
+author: "Aditya Gorla"
+date: "4/24/2019"
+output: html_document
+---
+
+##\n\n
+
+```{r setup, include=FALSE}
+rm(list=ls(all=TRUE))
+
+library(car)
+require(stats)
+require(stats4)
+library(MASS)
+library(knitr)
+library(tseries)
+library(forecast)
+library(moments)
+library("readxl")
+library(dynlm)
+library(zoo)
+library("TTR")
+library(rlist)
+library(tstools)
+library(datasets)
+library(fpp2)
+library(seasonal)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Introduction
+"""
+
+TODO: PUT INTRO HERE
+
+"""
+
+##\n\n
+
+### Results
+
+#### Initial Data Exploration
+
+```{r results='hold',message=FALSE}
+#Loading the data
+tsla<-read.table("TSLA.csv", header=TRUE, sep=",")
+names(tsla)=c("date","open","high","low","close","adjClose","Volume")
+attach(tsla)
+#we'll be working with adjusted closing price and the data is weekly
+tsla_ts<-ts(tsla$adjClose, start = 2010.5, frequency=52)
+
+plot(tsla_ts, xlab="Year", ylab="Adjusted Closing Price (in $)", main="TSLA Stock")
+tsdisplay(tsla_ts, main="TSLA Stock", xlab="Year", ylab="Adjusted Closing Price (in $)")
+
+```
+"""
+
+TODO: write initial analysis based on above plot
+      answer 1.b and 1.c
+
+"""
+
+##\n\n
+
+#### Initial Model building
+```{r results='hold',message=FALSE}
+# 1-week laggling linear model
+lin_m<- dynlm(tsla_ts ~ L(tsla_ts,1))
+plot(tsla_ts,lwd=2, col=1, main="TSLA Stock Linear Model Fit", xlab="Year", ylab="Adjusted Closing Price (in $)")
+lines(lin_m$fitted.values,col='red3',lwd=2)
+legend('bottomright', legend=c("Actual Value", "Linear Model Fit"), col=c(1, "red3"), lwd=2)
+
+# non-linear model
+nl_m<- dynlm(tsla_ts ~ L(tsla_ts,1) + I(L(tsla_ts,1)^2))
+plot(tsla_ts,lwd=2, col="black", main="TSLA Stock Non-Linear Model Fit", xlab="Year", ylab="Adjusted Closing Price (in $)")
+lines(nl_m$fitted.values,col='blue3',lwd=2)
+legend('bottomright', legend=c("Actual Value", "Non-Linear Model Fit"), col=c("black", "blue3"))
+summary(lin_m)
+summary(nl_m)
+
+```
+
+
+
+```{r results='hold',message=FALSE}
+
+```
+
+
+
+```{r results='hold',message=FALSE}
+
+```
+
+
