@@ -79,8 +79,8 @@ lines(lin_m$fitted.values ,col=2,lwd=2)
 legend('bottomright', legend=c("Actual Value", "Linear Model Fit"), col=1:2, lwd=2)
 
 # non-linear model
-nl_m<- dynlm(tsla_ts ~ t + t2+ t3)
-plot(tsla_ts,lwd=2, col="black", main="TSLA Stock Non-Linear Model Fit", xlab="Year", ylab="log-Adjusted Closing Price (in $)")
+nl_m<- dynlm(ltsla_ts ~ t + t2+ t3)
+plot(ltsla_ts,lwd=2, col="black", main="TSLA Stock Non-Linear Model Fit", xlab="Year", ylab="log-Adjusted Closing Price (in $)")
 lines(nl_m$fitted.values,col='blue3',lwd=2)
 legend('bottomright', legend=c("Actual Value", "Non-Linear Model Fit"), col=c("black", "blue3"),lwd=2)
 ```
