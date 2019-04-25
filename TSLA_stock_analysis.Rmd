@@ -173,7 +173,13 @@ The interpretation of this coefficient plot heavily suggests a pattern in stock 
 #### The Full Model
 
 ```{r results='hold',message=FALSE}
-full_m<-tslm(ltsla_ts~ t + t2 + t3 + season + 0)
+#cut data
+fmltsla_ts=window(ltsla_ts,2010,c(2018,10))
+frltsla_ts=window(ltsla_ts,c(2018,11),c(2019,19))
+fmt=t[1:400]
+fmt2=t2[1:400]
+fmt3=t3[1:400]
+full_m<-tslm(fmltsla_ts~ fmt + fmt2 + fmt3 + season + 0)
 
 #model performance statistics
 plot(ltsla_ts,lwd=2, col=1, main="TSLA Stock Full Model Fit", xlab="Year", ylab="Log-Adjusted Closing Price (in $)")
@@ -202,7 +208,7 @@ The overall adjusted R-squared is 0.9952. This indicates that a high percentage 
 
 #### The Full Model Forecast
 ```{r results='hold',message=FALSE}
-plot(predict(full_m$fitted.values, h=24) ,shadecols="oldstyle", main="TSLA Stock Full Forecast", xlab="Year", ylab="Log-Adjusted Closing Price (in $)", lwd=2, col=1, ylim=c(2.75, 6))
+plot(predict(full_m$fitted.values, h=61) ,shadecols="oldstyle", main="TSLA Stock Full Forecast", xlab="Year", ylab="Log-Adjusted Closing Price (in $)", lwd=2, col=1, ylim=c(2.75, 6))
 lines(ltsla_ts,lwd=2, col=2)
 legend('bottomright', legend=c( "Model+Forecast","Actual Value"), col=1:2, lwd=2)
 ```
