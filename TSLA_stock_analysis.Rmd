@@ -146,7 +146,16 @@ legend('bottomright', legend=c( "Model+Forcast","Actual Value"), col=1:2, lwd=2)
 #### Initial Data Exploration
 
 ```{r results='hold',message=FALSE}
-
+#2a,b,c,d,d: construct a model with a full set set of seasonal dummies, plot the seasonal factors, interpret plot, add trend from problem 1, interpret the summary, do h-step forecast (h>16)
+#recall that nl_m<- dynlm(ltsla_ts ~ t + t2 + t3)
+seasonal_m<-tslm(ltsla_ts ~ season+0)
+plot(seasonal_m$coefficients,xlab="Week",ylab="Seasonal Coefficient")
 ```
+The interpretation of this coefficient plot heavily suggests a pattern in stock price growth; a face-value analysis shows us that prices growth during the first half of each year (weeks 0-26) and then drop abruptly in the second half of the year. A continuation of this plot, however, into the next year, would suggest that growth occurs between ~week 30 of year i and week 30 of year i+1. Overall, the plot suggests a clear upward trend for Tesla stock prices.
 
+```{r results='hold',message=FALSE}
+m_final<-tslm(ltsla_ts~0+season+t + t2 + t3)
+#then we plot the residuals vs fitted values 
+plot(y=m_final$residuals,x=m_final$fitted.values,ylab="Residuals",xlab="fitted values")
+```
 
