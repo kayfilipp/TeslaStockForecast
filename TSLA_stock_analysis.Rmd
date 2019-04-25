@@ -97,13 +97,13 @@ legend('bottomright', legend=c("Actual Value", "Non-Linear Model Fit"), col=c("b
 #Part e,f,g, and h
 # linear model
 plot(y=lin_m$residuals, x=lin_m$fitted.values,lwd=2, col=1, main="TSLA Linear Model", xlab="Fitted Values", ylab="Residuals")
-truehist(lin_m$residuals,col='gray80',main="TSLA Linear Model", ylab="Fraction", xlab="Residuals")
+truehist(lin_m$residuals,col='gray80',main="TSLA Linear Model", ylab="Density", xlab="Residuals")
 summary(lin_m)
 
 
 # non-linear model
 plot(y=nl_m$residuals, x=nl_m$fitted.values,lwd=2, col=1, main="TSLA Non-Linear Model", xlab="Fitted Values", ylab="Residuals")
-truehist(nl_m$residuals,col='gray80',main="TSLA Non-Linear Model", ylab="Fraction", xlab="Residuals")
+truehist(nl_m$residuals,col='gray80',main="TSLA Non-Linear Model", ylab="Density", xlab="Residuals")
 summary(nl_m)
 
 AIC(lin_m,nl_m)
@@ -176,7 +176,7 @@ frltsla_ts=window(ltsla_ts,c(2019,8),c(2019,19))
 fmt=t[1:449]
 fmt2=t2[1:449]
 fmt3=t3[1:449]
-full_m<-tslm(fmltsla_ts~ fmt + fmt2 + fmt3 + season + 0)
+full_m<-tslm(fmltsla_ts~ fmt + fmt2 + fmt3 + season + 0) #regression analysis combining trend and seasonal
 
 #Part d
 #model performance statistics
@@ -184,7 +184,7 @@ plot(ltsla_ts,lwd=2, col=1, main="TSLA Stock Full Model Fit", xlab="Year", ylab=
 lines(full_m$fitted.values ,col=2,lwd=2)
 legend('bottomright', legend=c("Actual Value", "Full Model Fit"), col=1:2, lwd=2)
 plot(y=full_m$residuals,x=full_m$fitted.values,ylab="Residuals",xlab="fitted values", main="TSLA Full Model")
-truehist(full_m$residuals,col='gray80',main="TSLA Full Model", ylab="Fraction", xlab="Residuals")
+truehist(full_m$residuals,col='gray80',main="TSLA Full Model", ylab="Density", xlab="Residuals")
 summary(full_m)
 AIC(nl_m, full_m)
 BIC(nl_m, full_m)
