@@ -66,6 +66,7 @@ tsdisplay(tsla_ts, main="TSLA Stock", xlab="Year", ylab="Adjusted Closing Price 
 The plot shows that the stock prices are increasing over time. This indicates that the mean is time variant. In addition, The variance changes across time, with variance being relatively flat initially, before undergoing periods of fluctuating volatility. Hence, the data is not covariance stationary.
 
 ##\n\n
+
 The ACF shows that the data follows a correlated process, although it decays over time. This indicates that realizations from periods far into the past have less correlation with present realizations.The PACF shows that the spikes are mostly not significant, with only a few spikes exceeding the confidence intervals. Unlike the ACF, the PACF does not seem to decay over time. The ACF and PACF suggest that the series is autoregressive; the ACF gradually decays to zero while the pacf exhibits several major lag spikes, namely at lag 1 and lag 10. We can conclude that an AR model would be best suited for forecasting TESLA stock prices.
 
 ##\n\n
@@ -131,12 +132,12 @@ For AIC, the linear model has a value of 4794, but the non linear model has a mu
 
 ##\n\n
 
-#### Non-Linear Model Forcast
-We are going to do a 24-steps forcast using our Non-Linear model above. This should predict the weekly Tesla adjusted closing price for the next 6 months.
+#### Non-Linear Model Forecast
+We are going to do a 24-steps forecast using our Non-Linear model above. This should predict the weekly Tesla adjusted closing price for the next 6 months.
 ```{r results='hold',message=FALSE}
-plot(predict(nl_m$fitted.values, h=24) ,shadecols="oldstyle", main="TSLA Stock Non-Linear Model Forcast", xlab="Year", ylab="Log-Adjusted Closing Price (in $)", lwd=2, col=1, ylim=c(2.75, 6))
+plot(predict(nl_m$fitted.values, h=24) ,shadecols="oldstyle", main="TSLA Stock Non-Linear Model Forecast", xlab="Year", ylab="Log-Adjusted Closing Price (in $)", lwd=2, col=1, ylim=c(2.75, 6))
 lines(ltsla_ts,lwd=2, col=2)
-legend('bottomright', legend=c( "Model+Forcast","Actual Value"), col=1:2, lwd=2)
+legend('bottomright', legend=c( "Model+Forecast","Actual Value"), col=1:2, lwd=2)
 ```
 
 ##\n\n
@@ -183,5 +184,35 @@ summary(full_m)
 """
 
 TODO: - do word answers for 2.b, 2.c and 2.d
+      - if confidence intervals are missing below, Add them!
+
+"""
+An observation of the fitted values compared to their residuals demonstrates a periodic trend, roughly equivalent to a sine wave, suggesting that the nonlinear model combined with the seasonal component has not entirely identified the stochastic trend that determines Tesla stock prices.
+
+##\n\n
+
+#### The Full Model Forecast
+```{r results='hold',message=FALSE}
+plot(predict(full_m$fitted.values, h=24) ,shadecols="oldstyle", main="TSLA Stock Full Forecast", xlab="Year", ylab="Log-Adjusted Closing Price (in $)", lwd=2, col=1, ylim=c(2.75, 6))
+lines(ltsla_ts,lwd=2, col=2)
+legend('bottomright', legend=c( "Model+Forecast","Actual Value"), col=1:2, lwd=2)
+```
+
+##\n\n
+
+### Conclusions and Future Work
+"""
+
+TODO: - Fill in Conclusion here
+
+"""
+
+##\n\n
+
+### References
+"""
+
+TODO: - Fill in References here
+      - make better comment for large chunks of code
 
 """
