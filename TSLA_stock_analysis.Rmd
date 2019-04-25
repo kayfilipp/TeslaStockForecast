@@ -221,9 +221,9 @@ legend('bottomright', legend=c( "Model+Forecast","Actual Value"), col=1:2, lwd=2
 
 ### Conclusions and Future Work
 """
+We used our full model to forecast 24 steps ahead. With our data set, this would translate to a prediction of 6 weeks ahead. Our model predicts that over the next 6 weeks, the Log prices of Tesla stock would decrease. However, if we look at how our model fares compared to the actual value, we see that our model departs from the model at certain periods of time. 
 
-TODO: - Fill in Conclusion here
-
+In order to improve the model in the future, we could try to fit an ARIMA model in order to create a better fit with our actual data. This could allow us to account for cycles in addition to trend and seasonality which we already have in our full model. Going back to the residuals plot of our full model, we see some significant structure in the residuals after accounting for trend and seasonality. This could be addressed if we incorporate cycles into our model in the future.
 """
 
 ##\n\n
