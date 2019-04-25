@@ -1,0 +1,465 @@
+---
+title: "Econ144 Hw2"
+author: "Aditya Gorla"
+date: "4/18/2019"
+output:
+  html_document: default
+  pdf_document: default
+---
+##\n\n
+```{r setup, include=FALSE}
+rm(list=ls(all=TRUE))
+#setwd("/Users/adityagorla/Documents/Uni\ Classes/Econ144/Data/")
+
+library(car)
+require(stats)
+require(stats4)
+library(MASS)
+library(knitr)
+library(tseries)
+library(forecast)
+library(moments)
+library("readxl")
+library(dynlm)
+library(zoo)
+library("TTR")
+library(rlist)
+library(tstools)
+library(datasets)
+library(fpp2)
+library(seasonal)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Question 1
+##### Real GDP 
+Def: Real gross domestic product is the inflation adjusted value of the goods and services produced by labor and property located in the United States.
+
+##\n
+
+Units: Billions of Chained 2005 Dollars
+
+##\n
+
+Periodicity: Quaterly
+
+##\n
+
+Real GDP is not weakly staionary. It is neither 1st or 2nd order weakly stationary becuase the there is an constant upward trend and no mean reversion.
+```{r results='hold',message=FALSE}
+d11 <- read_excel("/Users/adityagorla/Documents/Uni\ Classes/Econ144/Data/Chapter3_exercises_data.xlsx",sheet=3)
+names(d11)=c("time","rgdp")
+attach(d11)
+rgdp <- ts(d11$rgdp,start=1947,freq=4)
+plot(rgdp,xlab="Year", ylab="Real GDP(in Billions, Chained 2005 Dollars)")
+```
+
+##\n\n
+
+##### The exchange rate of the Japanese yen against the U.S. dollar 
+Def: Noon buying rates in New York City for cable transfers payable in foregin currencies. The number of Japanese Yen one can buy for 1 dollar.
+
+##\n
+
+Units: Japanese Yen to One U.S. Dollar
+
+##\n
+
+Periodicity: Daily
+
+##\n
+
+It is neither 1st or 2nd order weakly stationary becuase the there is an constant upward trend and no mean reversion. The exchange rate is non-stationary.
+```{r results='hold',message=FALSE}
+d12 <- read_excel("/Users/adityagorla/Documents/Uni\ Classes/Econ144/Data/Chapter3_exercises_data.xlsx",sheet=4)
+names(d12)=c("time","exr")
+attach(d12)
+exr<-ts(d12$exr,start=1971,freq=365)
+plot(exr,xlab="Year", ylab="Exchange Rate(Japanese Yen/U.S. Dollar)")
+```
+
+##\n\n
+
+##### The 10-year U.S. Treasury constant maturity yield
+Def: An index published by the Federal Reserve Board based on the average yield of a range of Treasury securities, all adjusted to the equivalent of a 10-year maturity. Yields on Treasury securities at constant maturity are determined by the U.S. Treasury from the daily yield curve. That is based on the closing market-bid yields on actively traded Treasury securities in the over-the-counter market.
+
+##\n
+
+Units: Percent
+
+##\n
+
+Periodicity: Daily
+
+##\n
+
+The 10-year treasury yield is non-stationary. Because the data has a mean of 6 but little no mean reversion. Therefor, it is neither 1st or 2nd order weakly stationary.
+```{r results='hold',message=FALSE}
+d13 <- read_excel("/Users/adityagorla/Documents/Uni\ Classes/Econ144/Data/Chapter3_exercises_data.xlsx",sheet=5)
+names(d13)=c("time","cmr10")
+attach(d13)
+cmr<-ts(d13$cmr10,start=1962,freq=365)
+plot(cmr,xlab="Year", ylab="10yr-treasury maturity yield(Percent)")
+```
+
+##\n\n
+
+##### The U.S. unemployment rate
+Def: The unemployment rate represents the number of unemployed as a percentage of the labor force. Labor force data are restricted to people 16 years of age and older, who currently reside in 1 of the 50 states or the District of Columbia, who do not reside in institutions (e.g., penal and mental facilities, homes for the aged), and who are not on active duty in the Armed Forces.
+
+##\n
+
+Units: Percent
+
+##\n
+
+Periodicity: Monthly
+
+##\n
+
+The unemployment rate is non-stationary becuase there seems to be upward trend in the data and little to no mean reversion.
+```{r results='hold',message=FALSE}
+d14 <- read_excel("/Users/adityagorla/Documents/Uni\ Classes/Econ144/Data/Chapter3_exercises_data.xlsx",sheet=6)
+names(d14)=c("time","unemp")
+attach(d14)
+ump<-ts(d14$unemp,start=1948,freq=12)
+plot(ump,xlab="Year", ylab="Unemployment (Percent)")
+```
+
+##\n\n
+
+### Question 2
+##### US Nominal GDP
+```{r results='hold',message=FALSE}
+d2=data.frame(c(10021.5,10128.9,10135.1,10226.3,10338.2,10445.7,10546.5,10617.5,10744.6,10884.0,11116.7,11270.9,11472.6,11657.5,11814.9,11994.8))
+ngdp_ts <- ts(d2,start=2001,freq=4)
+plot(ngdp_ts, xlab="Year", ylab="Nominal GDP (in Billions of Dollars)")
+```
+
+Based on the graph above we can conclude that the underlying process is non-stationary. This is because there is no mean reversion and the GDP is constantly increasing.
+
+##### Calculating Nominal GDP growth rate , logarithm of GDP and its first log-difference
+```{r results='hold',message=FALSE}
+lngdp_ts <-ts(log(ngdp_ts),start=2001,freq=4)
+ngdp_gr <- ROC(ngdp_ts,n=1,type="discrete")*100
+lngdp_gr <- diff(lngdp_ts, n=1)*100
+```
+
+##### Logarithm of Nominal GDP
+```{r results='hold',message=FALSE}
+plot(lngdp_ts, xlab="Year", ylab="Log Nominal GDP")
+```
+
+##### Nominal GDP growth and first log-difference of NGDP
+```{r results='hold',message=FALSE}
+plot(ngdp_gr, xlab="Year", ylab="Values in %",col="red3")
+lines(lngdp_gr, col="blue3",lwd=2,lty=2)
+legend('bottomright', legend=c("NGDP Growth rate", "first log-difference of NGDP"), col=c("red3", "blue3"), lty=1:2, cex=0.8)
+```
+
+
+The lines in the plot above match up exactlty. Therefore, there is no differnce in Nominal GDP growth and first log-difference of NGDP.
+
+##\n\n
+
+### Question 3
+##### Data Initialization
+```{r results='hold',message=FALSE}
+d3 <- read_excel("/Users/adityagorla/Documents/Uni\ Classes/Econ144/Data/Chapter4_exercises_data.xls",sheet=2)
+names(d3)=c("time","price","r")
+attach(d3)
+price_ts <- ts(d3$price,start=1980.25,freq=4)
+price_gr <- ROC(price_ts,n=1,type="discrete")*100
+r_ts <- ts(d3$r,start=1980.25,freq=4)
+r_diff <- diff(r_ts, n=1)*100
+price_gr_nts <- ROC(d3$price,n=1,type="discrete")*100
+```
+
+```{r results='hold'}
+tsdisplay(price_ts, main="House Prices", xlab="Year", ylab = "Price (in Thousand of Dollars)")
+tsdisplay(r_ts, main="Interest Rate", xlab="Year", ylab = "Rate (in %)")
+tsdisplay(price_gr, main="House Prices Growth Rate", xlab="Year", ylab = "Growth Rate (in %)")
+tsdisplay(r_diff, main="Interest Rate Difference", xlab="Year", ylab = "Delta Rate (in %)")
+```
+
+
+Based in the ACF and PACF results we can conclude the that House Prices and Interest Rate have a stronger time dependence than House Prices Growth Rate and Interest Rate Difference. House Prices have the strongest time dependence. We arrive at this conclusion becuase House Price ACF has the largest,significant correalation over the most lags. Interest Rate Difference ACF informs us that, this has the weakest time dependence.
+
+##\n\n
+
+### Question 4
+##### Model Building and Summary Stats
+```{r results='hold',message=FALSE, warning=FALSE}
+m41=dynlm(price_gr~L(price_gr,1))
+
+m42=dynlm(price_gr~L(price_gr,1)+L(price_gr,2))
+
+m43=dynlm(price_gr~L(price_gr,1)+L(price_gr,2)+L(price_gr,3))
+
+m44=dynlm(price_gr~L(price_gr,1)+L(price_gr,2)+L(price_gr,3)+L(price_gr,4))
+
+summary(m41)
+summary(m42)
+summary(m43)
+summary(m44)
+
+AIC(m41,m42,m43,m44)
+BIC(m41,m42,m43,m44)
+```
+We select the 4-period lag model(m44), since it had the highest adj-R^2 and lowest AIC/BIC.
+
+##### The Recursive and Rolling Scheme Functions
+``` {r results='hold',message=FALSE }
+recursiveScheme <- function(dat){
+  strt<-(1/2)*length(dat)
+  end<-length(dat)
+  
+  window<-c(strt:end)
+  intercept=c()
+  lag1=c()
+  lag2=c()
+  lag3=c()
+  lag4=c()
+  
+  for (val in window){
+    estSpace <- ts(dat[seq(1,val,1)])
+    m <- dynlm(estSpace ~ L(estSpace,1)+L(estSpace,2)+L(estSpace,3)+L(estSpace,4))
+    coefs = m$coefficients
+    intercept = c(intercept,coefs[1])
+    lag1 = c(lag1,coefs[2])
+    lag2 = c(lag2,coefs[3])
+    lag3 = c(lag3,coefs[4])
+    lag4 = c(lag4,coefs[5])
+  }
+  
+  intercept = ts(intercept,start=strt,frequency=1)
+  lag1 = ts(lag1,start=strt,frequency=1)
+  lag2 = ts(lag2,start=strt,frequency=1)
+  lag3 = ts(lag3,start=strt,frequency=1)
+  lag4 = ts(lag4,start=strt,frequency=1)
+  
+  plot(intercept, main="Intercept Values")
+  plot(lag1, main="B1 Values")
+  plot(lag2, main="B2 Values")
+  plot(lag3, main="B3 Values")
+  plot(lag4, main="B4 Values")
+}
+rollingScheme <- function(dat){
+  winsz<-30
+  end<-length(dat)-winsz
+  range<-c(1:end)
+  
+  intercept=c()
+  lag1=c()
+  lag2=c()
+  lag3=c()
+  lag4=c()
+  
+  for(i in range){
+    window<-ts(dat[seq(1+i,winsz+i,1)])
+    m <- dynlm(window ~ L(window,1)+L(window,2)+L(window,3)+L(window,4))
+    coefs = m$coefficients
+    intercept = c(intercept,coefs[1])
+    lag1 = c(lag1,coefs[2])
+    lag2 = c(lag2,coefs[3])
+    lag3 = c(lag3,coefs[4])
+    lag4 = c(lag4,coefs[5])
+  }
+  intercept = ts(intercept,start=1,frequency=1)
+  lag1 = ts(lag1,start=1,frequency=1)
+  lag2 = ts(lag2,start=1,frequency=1)
+  lag3 = ts(lag3,start=1,frequency=1)
+  lag4 = ts(lag4,start=1,frequency=1)
+  
+  plot(intercept, main="Intercept Values")
+  plot(lag1, main="B1 Values")
+  plot(lag2, main="B2 Values")
+  plot(lag3, main="B3 Values")
+  plot(lag4, main="B4 Values")
+}
+```
+
+##### The Recursive Scheme Data
+``` {r results='hold',message=FALSE }
+recursiveScheme(price_gr_nts)
+```
+
+##### The Rolling Scheme Data
+``` {r results='hold',message=FALSE }
+rollingScheme(price_gr)
+```
+
+##\n\n
+
+### Question 5
+##### Data Initialization
+``` {r results='hold',message=FALSE }
+d5 <- read_excel("/Users/adityagorla/Documents/Uni\ Classes/Econ144/Data/Chapter4_exercises_data.xls",sheet=3)
+names(d5)=c("time","real","pred")
+attach(d5)
+real_ts <- ts(d5$real,start=1969,freq=4)
+pred_ts <- ts(d5$pred,start=1969,freq=4)
+err_ts <- real_ts - pred_ts
+```
+``` {r results='hold',message=FALSE }
+mu<-mean(err_ts)
+plot(err_ts, main="Forcast Error", xlab="Year", ylab = "Error (in %)")
+```
+
+The expectecd error is `r mu`, which is close enough to 0. Therefor, the errors have a mean of 0, so the forcast is fairly good.
+
+##### Forcast Error Regression
+``` {r results='hold',message=FALSE }
+m5=dynlm(err_ts~L(err_ts,1)+L(err_ts,2)+L(err_ts,3)+L(err_ts,4)+L(err_ts,5)+L(err_ts,6)+L(err_ts,7))
+summary(m5)
+```
+
+None of the parameters in the regession are statistically significant. So, we can conlude that there probablly isn't a predictable trend in the forcast errors and are simply random.
+
+
+##### F-Test
+``` {r results='hold',message=FALSE }
+summary(m5)$fstatistic
+linearHypothesis(m5, c("L(err_ts, 1)=0","L(err_ts, 2)=0", "L(err_ts, 3)=0", "L(err_ts, 4)=0", "L(err_ts, 5)=0", "L(err_ts, 6)=0", "L(err_ts, 7)=0"))
+linearHypothesis(m5, c("L(err_ts, 3)=0", "L(err_ts, 4)=0"))
+```
+
+From the above test, we can conclude that we cannot predict forcast error from its past. This becuase both F-tests fail to reject the null hypothisis that that the model has no power in explaining the trend in forcast error. Therefor, there is no predictable pattern in the forcast errors.
+
+##\n\n
+
+### Question 6
+
+##### Product A Data
+``` {r results='hold',message=FALSE }
+plas<-ts(plastics, start=1, frequency=12)
+plot(plas, main="Product A Data", xlab="Year", ylab="Monthly sales (in thousands)")
+```
+
+There seems to be a upward trend and annual sesonality in the data.
+
+``` {r results='hold',message=FALSE }
+plas %>% decompose(type="multiplicative") %>%
+  autoplot() + xlab("Year") +
+  ggtitle("Classical multiplicative decomposition of Product A")
+```
+
+The Decomposition seems to be agrees with our interpritation of the data. There is a upward trend and periodic sesonality in the data.
+
+``` {r results='hold',message=FALSE }
+plas_sadj<- stl(plas,s.window="periodic")
+plas_sadj<- seasadj(plas_sadj)
+
+plot(plas_sadj, main="Seasonally Adjusted Product A Data", xlab="Year", ylab="Monthly sales (in thousands)")
+```
+
+##### Outlier Introduced into Product A Data
+
+``` {r results='hold',message=FALSE }
+plas_o<-plas
+plas_o[55]=plas_o[55]+500
+
+plot(plas_o, xlab="Year", ylab="Monthly sales (in thousands)")
+plas_o_sadj<- stl(plas_o,s.window="periodic")
+plas_o_sadj<- seasadj(plas_o_sadj)
+plot(plas_o_sadj, main="Seasonally Adjusted Outlier Product A Data", xlab="Year", ylab="Monthly sales (in thousands)")
+```
+
+The outlier introduces a large spike in the data. This outlier is clearly observed in both the raw data and the seasonality adjusted data. It proabbly doesnt make much of a difference if the outlier is in the middle or the end of the data. But if it is closer to the middle the trend could be slightly skewed because of it.
+
+##\n\n
+
+### Question 7
+
+##### Product A Data
+``` {r results='hold',message=FALSE }
+gas<-ts(cangas, start=1960, frequency=12)
+
+gas %>%
+  autoplot(ylab="Canadian gas production (in billions of cubic metres)") +
+  ggtitle("Candian Gas Price(w/ autoplot())")
+
+
+ggseasonplot(gas,ylab="Canadian gas production (in billions of cubic metres)") +
+  ggtitle("Candian Gas Price(w/ ggseasonplot()")
+
+ggsubseriesplot(gas,ylab="Canadian gas production (in billions of cubic metres)") +
+  ggtitle("Candian Gas Price(w/ ggsubseriesplot()")
+```
+
+The volatility in gas production could be becuase of a number of factors such as discovering new oil field, varying demand for gas, varying supply of gas from oil fields and improvemnet in technology to obtain higher extraction effeciency.
+
+
+``` {r results='hold',message=FALSE }
+gas_stl<- stl(gas,s.window=13, robust=TRUE)
+gas_stl %>%
+  autoplot() +
+  ggtitle("STL decomposition of Candian Gas Price")
+#CHECK: what does he mean by "choose s.window to allow for the changing shape of the seasonal component"
+
+gas %>% seas(x11="") %>%
+autoplot() +
+  ggtitle("X11 decomposition of Candian Gas Price")
+
+gas %>% seas() %>%
+  autoplot() +
+  ggtitle("SEATS decomposition of Candian Gas Price")
+```
+
+Both SEATS and X11 give similar decomposition results, but seats does a better job at accounting for variance in the trend. The seasonal components seem to be identical for both methods.
+
+##\n\n
+
+### Question 8
+``` {r results='hold',message=FALSE }
+brk <- ts(bricksq, start=1956, frequency=4)
+
+brk_stl<- stl(brk,s.window="periodic")
+#periodic seems to be the best
+brk_stl %>%
+  autoplot(xlab="Year", ylab="Brick Clay Production") +
+  ggtitle("STL decomposition of Clay Brick Production")
+```
+
+The residulas/remainders here dont seem uncorrelated. There arnt normally distributed around 0. Also, there seems to be increasing variance and magnitude in the residuals as the time increases. There is probably uncaptured heteroschotasticity in the data.
+
+``` {r results='hold',message=FALSE }
+brk_sadj<- seasadj(brk_stl)
+autoplot(brk_sadj,xlab="Year", ylab="Brick Clay Production") + ggtitle("Seasonally Adjusted Clay Brick Production ")
+```
+
+``` {r results='hold',message=FALSE }
+brk_sadj %>% naive() %>%
+  autoplot(xlab="Year", ylab="Brick Clay Production") +
+  ggtitle("Seasonally Adjusted Clay Brick Production(Naive forecast)")
+
+brk %>% stlf( method='naive') %>%
+  autoplot(xlab="Year", ylab="Brick Clay Production") +
+  ggtitle("Seasonally Adjusted Clay Brick Production(Naive forecast w/ stlf)")
+```
+
+``` {r results='hold',message=FALSE }
+brk_stl<- stl(brk,s.window="periodic", robust=TRUE)
+brk_stl %>%
+  autoplot(xlab="Year", ylab="Brick Clay Production") +
+  ggtitle("STL decomposition of Clay Brick Production(Robust)")
+```
+
+The robust STL seems to give larger residuals than the non-robust function. The residuals of the robust stl seems to also be increasing with time more than non-robust stl. Therefor, non-robust stl seems to work better for this data.
+
+``` {r results='hold',message=FALSE }
+brk_train<- ts(bricksq, start=1956, end=1992.75, frequency=4)
+brk_test<- ts(bricksq[149:155], start=1993, frequency=4)
+
+
+fstlf<- stlf(brk_train,h=7, method='naive')
+fsnv<- snaive(brk_train, h=7)
+
+
+autoplot(fstlf,series="Forcast",xlab="Year", ylab="Brick Clay Production") +  autolayer(brk_test, series="Actual") + ggtitle("Clay Brick Production Forcast w/ stlf")
+autoplot(fsnv,series="Forcast",xlab="Year", ylab="Brick Clay Production") +  autolayer(brk_test, series="Actual") + ggtitle("Clay Brick Production Forcast w/ snaive")
+```
+
+Both methods seem to genarate equally good predictions. But snaive seems to generate better results lower forcast error, however its prediction interval is larger than stlf.
+
+
