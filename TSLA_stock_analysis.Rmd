@@ -198,10 +198,13 @@ TODO: - do word answers for 2.b, 2.c and 2.d
       - if confidence intervals are missing below, Add them!
 
 """
-The TSLA full model residuals still contain structure, demonstrating a periodic trend, roughly equivalent to a sine wave. This tells us that the nonlinear model combined with the seasonal component is not suffcient to strip away the series to only a stochastic process.The presence of cycles must still be influencing the residuals to create the residual plot seen.
+The TSLA full model residuals still contain structure, demonstrating a periodic trend, roughly equivalent to a sine wave. This tells us that the nonlinear model combined with the seasonal component is not suffcient to fully explain the signal exhibited in the data, as some of it is still retained in the residuals. We can therefore assume that the full model is missing some cyclical component, such as an AR or MA process. The T tests and F test confirm the significance of all variables in the full model well beyond a standard alpha value of 5%, suggesting that the model integrity is overall sound. The histogram, however, of full model residuals are not unimodal and show some gravitation away from 0, pointing to some pattern that was omitted from the model.
 
 ##\n\n
 
+<<<<<<< HEAD
+The overall adjusted R-squared is 0.9952. This indicates that a high percentage of variation in Tesla stock prices are explained by our model. All the coefficients are statistically significant at the 95% confidence level. The F-statistic 1723 on 55 and 406 Degrees of freedom with a p-value much smaller than 0.05, allows us to reject the null that the overall model is not significant. The AIC and BIC of the full model pose an issue because both results are greater than AIC and BIC for the nonlinear trend alone which suggest our full model is weaker. Despite some evidence that the AIC and BIC point to the full model being weaker, these figures can be ignored due to the fact that the comparrison is between a non-linear model with only 3 variables against a full model with 52 extra seasonal dummies, coming out to a grand total of 55 estimators in the full model. The AIC and BIC can be dismissed in favor of both the plot of the residuals and the R squared value, which both point to the full model as being more robust than the linear model. 
+=======
 The overall adjusted R-squared is 0.9952. This indicates that a high percentage of variation in Tesla stock prices are explained by our model. All the coefficients are statistically significant at the 95% confidence level. The F-statistic 1723 on 55 and 406 Degrees of freedom with a p-value much smaller than 1, allows us to reject the null that the overall model is not significant.
 
 ##\n\n
@@ -218,6 +221,8 @@ legend('bottomright', legend=c( "Model+Forecast","Actual Value"), col=1:2, lwd=2
 ### Conclusions and Future Work
 """
 We used our full model to forecast 24 steps ahead. With our data set, this would translate to a prediction of 6 weeks ahead. Our model predicts that over the next 6 weeks, the Log prices of Tesla stock would decrease. However, if we look at how our model fares compared to the actual value, we see that our model departs from the model at certain periods of time. 
+
+In order to improve the model in the future, we could try to fit an ARIMA model in order to create a better fit with our actual data. This could allow us to account for cycles in addition to trend and seasonality which we already have in our full model. Going back to the residuals plot of our full model, we see some significant structure in the residuals after accounting for trend and seasonality. This could be addressed if we incorporate cycles into our model in the future.
 """
 
 ##\n\n
