@@ -64,23 +64,22 @@ tsdisplay(tsla_ts, main="TSLA Stock", xlab="Year", ylab="Adjusted Closing Price 
 
 ```
 
-1.b) The plot shows that the stock prices are increasing over time. This indicates that the mean is time variant. In addition, The variance changes across time, with variance being relatively flat initially, before undergoing periods of fluctuating volatility. Hence, the data is not covariance stationary.
+The plot shows that the stock prices are increasing over time. This indicates that the mean is time variant. In addition, The variance changes across time, with variance being relatively flat initially, before undergoing periods of fluctuating volatility. Hence, the data is not covariance stationary.
 
 ##\n\n
 
-1.c)The ACF shows that the data follows a correlated process, although it decays over time. This indicates that realizations from periods far into the past have less correlation with present realizations.The PACF shows that the spikes are mostly not significant, with only a few spikes exceeding the confidence intervals. Unlike the ACF, the PACF does not seem to decay over time. The ACF and PACF suggest that the series is autoregressive; the ACF gradually decays to zero while the pacf exhibits several major lag spikes, namely at lag 1 and lag 10. We can conclude that an AR model would be best suited for forecasting TESLA stock prices.
+The ACF shows that the data follows a correlated process, although it decays over time. This indicates that realizations from periods far into the past have less correlation with present realizations.The PACF shows that the spikes are mostly not significant, with only a few spikes exceeding the confidence intervals. Unlike the ACF, the PACF does not seem to decay over time. The ACF and PACF suggest that the series is autoregressive; the ACF gradually decays to zero while the pacf exhibits several major lag spikes, namely at lag 1 and lag 10. We can conclude that an AR model would be best suited for forecasting TESLA stock prices.
 
 ##\n\n
 
 #### Initial Model building
 ```{r results='hold',message=FALSE}
-<<<<<<< HEAD
+
 # linear model
 lin_m<- dynlm(ltsla_ts ~ t)
-=======
+
 # Part d
 lin_m<- dynlm(tsla_ts ~ t) # linear model
->>>>>>> d853216e6acb53c9406054baa469056763cfa116
 plot(tsla_ts,lwd=2, col=1, main="TSLA Stock Linear Model Fit", xlab="Year", ylab="Adjusted Closing Price (in $)")
 lines(lin_m$fitted.values ,col=2,lwd=2)
 legend('bottomright', legend=c("Actual Value", "Linear Model Fit"), col=1:2, lwd=2)
@@ -205,11 +204,10 @@ The TSLA full model residuals still contain structure, demonstrating a periodic 
 
 ##\n\n
 
-<<<<<<< HEAD
 The overall adjusted R-squared is 0.9952. This indicates that a high percentage of variation in Tesla stock prices are explained by our model. All the coefficients are statistically significant at the 95% confidence level. The F-statistic 1723 on 55 and 406 Degrees of freedom with a p-value much smaller than 0.05, allows us to reject the null that the overall model is not significant. The AIC and BIC of the full model pose an issue because both results are greater than AIC and BIC for the nonlinear trend alone which suggest our full model is weaker. Despite some evidence that the AIC and BIC point to the full model being weaker, these figures can be ignored due to the fact that the comparrison is between a non-linear model with only 3 variables against a full model with 52 extra seasonal dummies, coming out to a grand total of 55 estimators in the full model. The AIC and BIC can be dismissed in favor of both the plot of the residuals and the R squared value, which both point to the full model as being more robust than the linear model. 
-=======
+
 The overall adjusted R-squared is 0.9952. This indicates that a high percentage of variation in Tesla stock prices are explained by our model. All the coefficients are statistically significant at the 95% confidence level. The F-statistic 1723 on 55 and 406 Degrees of freedom with a p-value much smaller than 1, allows us to reject the null that the overall model is not significant.
->>>>>>> 2ee8c3b6bd85d46d479c28781d3c3626c61cf558
+
 
 ##\n\n
 
@@ -218,32 +216,34 @@ The overall adjusted R-squared is 0.9952. This indicates that a high percentage 
 plot(predict(full_m$fitted.values, h=24,level=c(80,99)) ,shadecols="oldstyle", main="TSLA Stock Full Forecast", xlab="Year", ylab="Log-Adjusted Closing Price (in $)", lwd=2, col=1, ylim=c(2.75, 6))
 lines(ltsla_ts,lwd=2, col=2)
 legend('bottomright', legend=c( "Model+Forecast","Actual Value"), col=1:2, lwd=2)
-legend(3.5,2019,legend=c("80 conf","99 conf"),lty=(1,1),col=c("red","orange"))
+legend('topleft', legend=c("80% Confidence","99% Confidence"), lty=1:1,col=c("red","orange"))
 
 ```
 
 ##\n\n
 
 ### Conclusions and Future Work
-"""
+
 We used our full model to forecast 24 steps ahead. With our data set, this would translate to a prediction of 6 weeks ahead. Our model predicts that over the next 6 weeks, the Log prices of Tesla stock would decrease. However, if we look at how our model fares compared to the actual value, we see that our model departs from the model at certain periods of time. 
 
+##\n\n
+
 In order to improve the model in the future, we could try to fit an ARIMA model in order to create a better fit with our actual data. This could allow us to account for cycles in addition to trend and seasonality which we already have in our full model. Going back to the residuals plot of our full model, we see some significant structure in the residuals after accounting for trend and seasonality. This could be addressed if we incorporate cycles into our model in the future.
-"""
 
 ##\n\n
 
 ### References
-"""
 
 Sources:
-Yahoo Finance
+- Yahoo Finance
 https://finance.yahoo.com/quote/TSLA/
 
-Rob Hyndman, working with daily data
+##\n\n
+
+- Rob Hyndman, working with daily data
 https://robjhyndman.com/hyndsight/dailydata/
 
-R Documentation: TSLM
-https://www.rdocumentation.org/packages/forecast/versions/8.5/topics/tslm
+##\n\n
 
-"""
+- R Documentation: TSLM
+https://www.rdocumentation.org/packages/forecast/versions/8.5/topics/tslm
