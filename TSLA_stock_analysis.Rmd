@@ -217,9 +217,7 @@ legend('bottomright', legend=c( "Model+Forecast","Actual Value"), col=1:2, lwd=2
 
 ### Conclusions and Future Work
 """
-
-TODO: - Fill in Conclusion here
-
+We used our full model to forecast 24 steps ahead. With our data set, this would translate to a prediction of 6 weeks ahead. Our model predicts that over the next 6 weeks, the Log prices of Tesla stock would decrease. However, if we look at how our model fares compared to the actual value, we see that our model departs from the model at certain periods of time. 
 """
 
 ##\n\n
