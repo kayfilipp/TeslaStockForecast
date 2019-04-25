@@ -149,12 +149,10 @@ legend('bottomright', legend=c( "Model+Forecast","Actual Value"), col=1:2, lwd=2
 
 ### Modeling and Forecasting Seasonality
 
-#### Seasonal Model Building and Analysis
-
 ```{r results='hold',message=FALSE}
-seas_m=tslm(tsla_ts~season+0)
+seas_m=tslm(tsla_ts~season+0) #Part a
 summary(seas_m)
-plot(seas_m$coefficients, xlab="Week", ylab="Co-effecient Value",main="Estimated Seasonal Factors", type="o",lwd=2)
+plot(seas_m$coefficients, xlab="Week", ylab="Co-effecient Value",main="Estimated Seasonal Factors", type="o",lwd=2) #Part b
 
 #Some seasonal decompositions to better understand seasonality
 ggsubseriesplot(tsla_ts ,ylab="Adjusted Closing Price (in $)", xlab="Week") +
@@ -164,10 +162,7 @@ ggseasonplot(tsla_ts ,ylab="Adjusted Closing Price (in $)", xlab="Week") +
 stl(tsla_ts,s.window=52) %>% autoplot() +
   ggtitle("STL decomposition of Tesla Stock Prices")
 ```
-"""
 
-TODO: - Comfirm we did 2.a and 2.b correctly
-"""
 The interpretation of this coefficient plot heavily suggests a pattern in stock price growth; a face-value analysis shows there is growth during the first half of each year (weeks 0-26) which then falls in the second half of the year. A continuation of this plot, however, into the next year, would suggest that growth occurs between ~week 30 of year i and week 30 of year i+1. Overall, the plot suggests a clear seasonal component where prices rise over ~60 weeks before falling again.
 
 ##\n\n
@@ -175,14 +170,15 @@ The interpretation of this coefficient plot heavily suggests a pattern in stock 
 #### The Full Model
 
 ```{r results='hold',message=FALSE}
-#cut data
-fmltsla_ts=window(ltsla_ts,2010,c(2019,7))
+#Part c
+fmltsla_ts=window(ltsla_ts,2010,c(2019,7)) #cut the data into two sets, one for forecasting and the other to evaluate.
 frltsla_ts=window(ltsla_ts,c(2019,8),c(2019,19))
 fmt=t[1:449]
 fmt2=t2[1:449]
 fmt3=t3[1:449]
 full_m<-tslm(fmltsla_ts~ fmt + fmt2 + fmt3 + season + 0)
 
+#Part d
 #model performance statistics
 plot(ltsla_ts,lwd=2, col=1, main="TSLA Stock Full Model Fit", xlab="Year", ylab="Log-Adjusted Closing Price (in $)")
 lines(full_m$fitted.values ,col=2,lwd=2)
@@ -213,6 +209,7 @@ The overall adjusted R-squared is 0.9952. This indicates that a high percentage 
 
 #### The Full Model Forecast
 ```{r results='hold',message=FALSE}
+#Part e
 plot(predict(full_m$fitted.values, h=24,level=c(80,99)) ,shadecols="oldstyle", main="TSLA Stock Full Forecast", xlab="Year", ylab="Log-Adjusted Closing Price (in $)", lwd=2, col=1, ylim=c(2.75, 6))
 lines(ltsla_ts,lwd=2, col=2)
 legend('bottomright', legend=c( "Model+Forecast","Actual Value"), col=1:2, lwd=2)
@@ -247,3 +244,5 @@ https://robjhyndman.com/hyndsight/dailydata/
 
 - R Documentation: TSLM
 https://www.rdocumentation.org/packages/forecast/versions/8.5/topics/tslm
+
+
