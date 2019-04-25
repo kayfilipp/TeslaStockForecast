@@ -1,6 +1,6 @@
 ---
 title: "Econ144 Project1"
-author: "Aditya Gorla"
+author: "Aditya Gorla, Vincent Chenneveau, Georges Ip, Filip Karasovsky"
 date: "4/24/2019"
 output: html_document
 ---
@@ -38,52 +38,54 @@ Over the past few years developments in electric car technology and batteries ha
 
 ##\n\n
 
-We chose to model and forecast the weekly adjusted closing price of Tesla stock over a 9 year period. We chose weekly data over daily data to avoid short term noise in higher frequency trading, as well as to make accurate trend and seasonality measures.
+We chose to model and forecast the weekly adjusted closing price of Tesla stock over a 9 year period. We chose weekly data over daily data to avoid short term noise in higher frequency trading, as well as to make accurate trend and seasonality measures. 
 
 
 ##\n\n
 
-### Results
+## Results
 
-#### Initial Data Exploration
+#### Modeling and Forecasting Trend
 
 ```{r results='hold',message=FALSE}
-#Loading the data
-tsla<-read.table("TSLA.csv", header=TRUE, sep=",")
-names(tsla)=c("date","open","high","low","close","adjClose","Volume")
+tsla<-read.table("TSLA.csv", header=TRUE, sep=",") #Load the data into R
+names(tsla)=c("date","open","high","low","close","adjClose","Volume") #name coloumns of table
 attach(tsla)
-#we'll be working with adjusted closing price and the data is weekly
-tsla_ts<-ts(tsla$adjClose, start = 2010.5, frequency=52)
-t<-seq(length=length(tsla_ts))
+tsla_ts<-ts(tsla$adjClose, start = 2010.5, frequency=52) #extract the adjusted close data
+t<-seq(length=length(tsla_ts)) #create a sequence same length as data
 t2<-t^2
 t3<-t^3
 t4<-t^4
 t5<-t^5
-ltsla_ts<- log(tsla_ts)
+ltsla_ts<- log(tsla_ts) #take the logo of price data
 
-plot(tsla_ts, xlab="Year", ylab="Adjusted Closing Price (in $)", main="TSLA Stock")
+plot(tsla_ts, xlab="Year", ylab="Adjusted Closing Price (in $)", main="TSLA Stock")# Part A
 tsdisplay(tsla_ts, main="TSLA Stock", xlab="Year", ylab="Adjusted Closing Price (in $)")
 
 ```
 
-The plot shows that the stock prices are increasing over time. This indicates that the mean is time variant. In addition, The variance changes across time, with variance being relatively flat initially, before undergoing periods of fluctuating volatility. Hence, the data is not covariance stationary.
+1.b) The plot shows that the stock prices are increasing over time. This indicates that the mean is time variant. In addition, The variance changes across time, with variance being relatively flat initially, before undergoing periods of fluctuating volatility. Hence, the data is not covariance stationary.
 
 ##\n\n
 
-The ACF shows that the data follows a correlated process, although it decays over time. This indicates that realizations from periods far into the past have less correlation with present realizations.The PACF shows that the spikes are mostly not significant, with only a few spikes exceeding the confidence intervals. Unlike the ACF, the PACF does not seem to decay over time. The ACF and PACF suggest that the series is autoregressive; the ACF gradually decays to zero while the pacf exhibits several major lag spikes, namely at lag 1 and lag 10. We can conclude that an AR model would be best suited for forecasting TESLA stock prices.
+1.c)The ACF shows that the data follows a correlated process, although it decays over time. This indicates that realizations from periods far into the past have less correlation with present realizations.The PACF shows that the spikes are mostly not significant, with only a few spikes exceeding the confidence intervals. Unlike the ACF, the PACF does not seem to decay over time. The ACF and PACF suggest that the series is autoregressive; the ACF gradually decays to zero while the pacf exhibits several major lag spikes, namely at lag 1 and lag 10. We can conclude that an AR model would be best suited for forecasting TESLA stock prices.
 
 ##\n\n
 
 #### Initial Model building
 ```{r results='hold',message=FALSE}
+<<<<<<< HEAD
 # linear model
 lin_m<- dynlm(ltsla_ts ~ t)
+=======
+# Part d
+lin_m<- dynlm(tsla_ts ~ t) # linear model
+>>>>>>> d853216e6acb53c9406054baa469056763cfa116
 plot(tsla_ts,lwd=2, col=1, main="TSLA Stock Linear Model Fit", xlab="Year", ylab="Adjusted Closing Price (in $)")
 lines(lin_m$fitted.values ,col=2,lwd=2)
 legend('bottomright', legend=c("Actual Value", "Linear Model Fit"), col=1:2, lwd=2)
 
-# non-linear model
-nl_m<- dynlm(ltsla_ts ~ t + t2 + t3)
+nl_m<- dynlm(ltsla_ts ~ t + t2 + t3)# non-linear model
 plot(ltsla_ts,lwd=2, col="black", main="TSLA Stock Non-Linear Model Fit", xlab="Year", ylab="Log-Adjusted Closing Price (in $)")
 lines(nl_m$fitted.values,col='blue3',lwd=2)
 legend('bottomright', legend=c("Actual Value", "Non-Linear Model Fit"), col=c("black", "blue3"),lwd=2)
@@ -93,7 +95,7 @@ legend('bottomright', legend=c("Actual Value", "Non-Linear Model Fit"), col=c("b
 
 #### Initial Model Diagnostics and Selection
 ```{r results='hold',message=FALSE}
-
+#Part e,f,g, and h
 # linear model
 plot(y=lin_m$residuals, x=lin_m$fitted.values,lwd=2, col=1, main="TSLA Linear Model", xlab="Fitted Values", ylab="Residuals")
 truehist(lin_m$residuals,col='gray80',main="TSLA Linear Model", ylab="Fraction", xlab="Residuals")
@@ -138,6 +140,7 @@ For AIC, the linear model has a value of 4794, but the non linear model has a mu
 #### Non-Linear Model Forecast
 We are going to do a 24-steps forecast using our Non-Linear model above. This should predict the weekly Tesla adjusted closing price for the next 6 months.
 ```{r results='hold',message=FALSE}
+#Part i
 plot(predict(nl_m$fitted.values, h=24) ,shadecols="oldstyle", main="TSLA Stock Non-Linear Model Forecast", xlab="Year", ylab="Log-Adjusted Closing Price (in $)", lwd=2, col=1, ylim=c(2.75, 6))
 lines(ltsla_ts,lwd=2, col=2)
 legend('bottomright', legend=c( "Model+Forecast","Actual Value"), col=1:2, lwd=2)
@@ -215,6 +218,8 @@ The overall adjusted R-squared is 0.9952. This indicates that a high percentage 
 plot(predict(full_m$fitted.values, h=24) ,shadecols="oldstyle", main="TSLA Stock Full Forecast", xlab="Year", ylab="Log-Adjusted Closing Price (in $)", lwd=2, col=1, ylim=c(2.75, 6))
 lines(ltsla_ts,lwd=2, col=2)
 legend('bottomright', legend=c( "Model+Forecast","Actual Value"), col=1:2, lwd=2)
+legend(3.5,2019,legend=c(""))
+
 ```
 
 ##\n\n
