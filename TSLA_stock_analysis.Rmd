@@ -31,11 +31,11 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ### Introduction
-Over the past few years developments in electric car technology and batteries have sky-rocketed.Tesla is a company that aims to be at the forefront of these technological advancements.Their first mover advantage into many industries such as SpaceX and the Boring Company has made them the headlines.Tesla has gained noteriety for its erratic CEO who has smoked weed on live broadcast and shot his car into space. Will Tesla maintain its status in the eyes of the public or will an overpaid CEO leave to much room for entrants and lose their competitive advantage? The public loves Tesla but Wall Street does not love an unpredictable CEO. Investigating the stock price of Tesla will give us an idea of where its headed in the future.
+Over the past few years developments in electric car technology and batteries have sky-rocketed. Tesla is a company that aims to be at the forefront of these technological advancements. Tesla has gained noteriety for its erratic CEO who has smoked weed on live broadcast and shot his car into space. Will Tesla maintain its status in the eyes of the public or will an overpaid CEO leave to much room for entrants and lose their competitive advantage? The public loves Tesla but Wall Street does not love an unpredictable CEO. Investigating the stock price of Tesla will give us an idea of where its headed in the future.
 
 ##\n\n
 
-We chose to model and forecast the weekly adjusted closing price of Tesla stock over a 9 year period. We chose weekly data over daily data to avoid short term noise in higher frequency trading, as well as to make accurate trend and seasonality measures. 
+We choose to model and forecast the weekly adjusted closing price of Tesla stock starting in Q3 of 2010. We choose weekly data over daily data to avoid short term noise in higher frequency trading, as well as to make accurate trend and seasonality measures.
 
 ##\n\n
 
@@ -64,7 +64,7 @@ The plot shows that the stock prices are increasing over time. This indicates th
 
 ##\n\n
 
-The ACF shows that the data follows a correlated process, although it decays over time. This indicates that realizations from periods far into the past have less correlation with present realizations.The PACF shows that the spikes are mostly not significant, with only a few spikes exceeding the confidence intervals. Unlike the ACF, the PACF does not seem to decay over time. The ACF and PACF suggest that the series is autoregressive; the ACF gradually decays to zero while the pacf exhibits several major lag spikes, namely at lag 1 and lag 10. We can conclude that an AR model would be best suited for forecasting TESLA stock prices.
+The ACF shows that the data follows a correlated process, although it decays over time. This indicates that realizations from periods far into the past have less correlation with present realizations.The PACF shows that the spikes are mostly not significant, with only a few spikes statistically significant spikes. Unlike the ACF, the PACF does not seem to decay over time. The ACF and PACF suggest that the series is autoregressive; the ACF gradually decays to zero while the pacf exhibits several major lag spikes, namely at lag 1 and lag 10. We can conclude that an AR model would be best suited for forecasting TESLA stock prices.
 
 ##\n\n
 
@@ -103,7 +103,6 @@ truehist(nl_m$residuals,col='gray80',main="TSLA Non-Linear Model", ylab="Density
 summary(nl_m)
 
 AIC(lin_m,nl_m)
-
 BIC(lin_m,nl_m)
 ```
 
@@ -111,20 +110,20 @@ For the linear model, the plot of the residuals and the fitted values shows that
 
 ##\n\n
 
-For the non-linear model, the plot of the residuals and the fitted values shows that there is clearly some structure present in the residuals. The residuals seem to go through some seasonality as well.Compared to the linear model, the plot of the histogram shows that the residuals also centered around 0 but are less symmetric but is skewed. Hence, the normality assumption for the residuals is not to hold as well. However, the scale of the residuals for the non-linear model is significantly smaller compared to the
+For the non-linear model, the plot of the residuals and the fitted values shows that there is clearly some structure present in the residuals. The residuals seem to go through some seasonality as well. Compared to the linear model, the plot of the histogram shows that the residuals also centered around 0 but are less symmetric but is skewed. Hence, the normality assumption for the residuals is not to hold as well. However, the scale of the residuals for the non-linear model is significantly smaller compared to those in the linear model.
 
 
 ##\n\n
 
-For the linear model, we have an adjusted R-squared of 0.8562, which means that a relatively high proportion of the stock prices are explained by t. 
+For the linear model, we have an adjusted R-squared of 0.8562, which means that a relatively high proportion of the stock prices variance are explained by t(linear time). 
 The t-value for the coefficient of t also indicates that the estimated coefficient is statistically significant at a confidence level of 95%.
-From the F-statistic, we reject the null hypothesis that the coefficient of all the variables is equal to 0.
+Since the F-statistic is highly significant, we reject the null hypothesis that the coefficient of all the variables is equal to 0.
 
 ##\n\n
 
-For the non-linear model, we have an adjusted R-squared of 0.9006, which means that a higher proportion of the stock prices are explained by t, t2 and t3. 
+For the non-linear model, we have an adjusted R-squared of 0.9006, which means that a higher proportion of the stock prices are explained by t, t^2 and t^3. 
 The t-value for the coefficients of t, t2 and t3 also indicates that the estimated coefficient is statistically significant at a confidence level of 95%.
-From the F-statistic, we reject the null hypothesis that the coefficient of all the variables is equal to 0.
+Since the F-statistic is highly significant, we reject the null hypothesis that the coefficient of all the variables is equal to 0.
 
 ##\n\n
 
@@ -165,7 +164,7 @@ The interpretation of this coefficient plot heavily suggests a pattern in stock 
 
 #### The Full Model
 
-```{r results='hold',message=FALSE}
+```{r results='hold',message=FALSE, warning=FALSE}
 #Part c
 fmltsla_ts=window(ltsla_ts,2010,c(2019,7)) #cut the data into two sets, one for forecasting and the other to evaluate.
 frltsla_ts=window(ltsla_ts,c(2019,8),c(2019,19))
@@ -192,8 +191,6 @@ The TSLA full model residuals still contain structure, demonstrating a periodic 
 ##\n\n
 
 The overall adjusted R-squared is 0.9952. This indicates that a high percentage of variation in Tesla stock prices are explained by our model. All the coefficients are statistically significant at the 95% confidence level. The F-statistic 1723 on 55 and 406 Degrees of freedom with a p-value much smaller than 0.05, allows us to reject the null that the overall model is not significant. The AIC and BIC of the full model pose an issue because both results are greater than AIC and BIC for the nonlinear trend alone which suggest our full model is weaker. Despite some evidence that the AIC and BIC point to the full model being weaker, these figures can be ignored due to the fact that the comparrison is between a non-linear model with only 3 variables against a full model with 52 extra seasonal dummies, coming out to a grand total of 55 estimators in the full model. The AIC and BIC can be dismissed in favor of both the plot of the residuals and the R squared value, which both point to the full model as being more robust than the linear model. 
-
-The overall adjusted R-squared is 0.9952. This indicates that a high percentage of variation in Tesla stock prices are explained by our model. All the coefficients are statistically significant at the 95% confidence level. The F-statistic 1723 on 55 and 406 Degrees of freedom with a p-value much smaller than 1, allows us to reject the null that the overall model is not significant.
 
 ##\n\n
 
