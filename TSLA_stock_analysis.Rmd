@@ -31,11 +31,12 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ### Introduction
-"""
+With the recent developments in electric car technology as well as battery research, companies who entered the game early should have been able to capitalize on these factors. One of the first companies that come to mind would be Tesla. Companies closely associated with Tesla have been making headlines in recent years as well, such as SpaceX and the Boring Company. We wanted to look at these recent developments and see if this stock is promising.
 
-TODO: PUT INTRO HERE
+##\n\n
 
-"""
+We chose to model and forecast the weekly adjusted closing price of Tesla stock over a 9 year period. We chose weekly data over daily data to avoid short term noise in higher frequency trading, as well as to accurate measure trend and seasonality.
+
 
 ##\n\n
 
@@ -61,12 +62,11 @@ plot(tsla_ts, xlab="Year", ylab="Adjusted Closing Price (in $)", main="TSLA Stoc
 tsdisplay(tsla_ts, main="TSLA Stock", xlab="Year", ylab="Adjusted Closing Price (in $)")
 
 ```
-"""
 
-TODO: write initial analysis based on above plot
-      The ACF and PACF suggest that the series is autoregressive; the ACF gradually decays to zero while the pacf exhibits several major lag spikes, namely at lag 1 and lag 10. We can conclude that an AR model would be best suited for forecasting TESLA stock prices.
+The plot shows that the stock prices are increasing over time. This indicates that the mean is time variant. In addition, The variance changes across time, with variance being relatively flat initially, before undergoing periods of fluctuating volatility. Hence, the data is not covariance stationary.
 
-"""
+##\n\n
+The ACF shows that the data follows a correlated process, although it decays over time. This indicates that realizations from periods far into the past have less correlation with present realizations.The PACF shows that the spikes are mostly not significant, with only a few spikes exceeding the confidence intervals. Unlike the ACF, the PACF does not seem to decay over time. The ACF and PACF suggest that the series is autoregressive; the ACF gradually decays to zero while the pacf exhibits several major lag spikes, namely at lag 1 and lag 10. We can conclude that an AR model would be best suited for forecasting TESLA stock prices.
 
 ##\n\n
 
@@ -102,30 +102,48 @@ truehist(nl_m$residuals,col='gray80',main="TSLA Non-Linear Model", ylab="Fractio
 summary(nl_m)
 
 AIC(lin_m,nl_m)
+
 BIC(lin_m,nl_m)
 ```
-"""
 
-TODO: Analyze the above plots and answer 1.e, 1.f, 1.g and 1.h
+For the linear model, the plot of the residuals and the fitted values shows that there is clearly a lot of structure present in the residuals. The residuals seem to go through some seasonality. For the linear model, the plot of the histogram shows that the residuals are centered around 0 and are somewhat symmetric but is skewed. Hence, the normality assumption for the residuals is unlikely to hold.
 
-Overall, the AIC/BIC suggests that the nonlinear model is better than the linear model with regards to forecasting strength.
-Residuals seem to behave uniformly in both models, with slightly more spread in the nonlinear model. Residuals for the linear
-model seem to follow a relatively normal distribution while nonlinear residuals, as dictated by the histograms, display prominent
-spikes on either side of the mode, suggesting the distribution is not unimodal.
+##\n\n
 
-"""
+For the non-linear model, the plot of the residuals and the fitted values shows that there is clearly some structure present in the residuals. The residuals seem to go through some seasonality as well.Compared to the linear model, the plot of the histogram shows that the residuals also centered around 0 but are less symmetric but is skewed. Hence, the normality assumption for the residuals is not to hold as well. However, the scale of the residuals for the non-linear model is significantly smaller compared to the
+
+
+##\n\n
+
+For the linear model, we have an adjusted R-squared of 0.8562, which means that a relatively high proportion of the stock prices are explained by t. 
+The t-value for the coefficient of t also indicates that the estimated coefficient is statistically significant at a confidence level of 95%.
+From the F-statistic, we reject the null hypothesis that the coefficient of all the variables is equal to 0.
+
+##\n\n
+
+For the non-linear model, we have an adjusted R-squared of 0.9006, which means that a higher proportion of the stock prices are explained by t, t2 and t3. 
+The t-value for the coefficients of t, t2 and t3 also indicates that the estimated coefficient is statistically significant at a confidence level of 95%.
+From the F-statistic, we reject the null hypothesis that the coefficient of all the variables is equal to 0.
+
+##\n\n
+
+For AIC, the linear model has a value of 4794, but the non linear model has a much lower value of 275. Hence, based on AIC, we pick the non-linear model. For BIC, the linear model has a value of 4806, but the non linear model has a much lower value of 296 Hence, based on BIC, we pick the non-linear model. Overall, the AIC/BIC suggests that the nonlinear model is better than the linear model with regards to forecasting strength. Hence, both models agree.
 
 ##\n\n
 
 #### Non-Linear Model Forcast
 We are going to do a 24-steps forcast using our Non-Linear model above. This should predict the weekly Tesla adjusted closing price for the next 6 months.
 ```{r results='hold',message=FALSE}
-plot(forecast(nl_m$fitted.values ,h=24) ,shadecols="oldstyle", main="TSLA Stock Non-Linear Model Forcast", xlab="Year", ylab="Log-Adjusted Closing Price (in $)",lwd=2, col=1)
+plot(predict(nl_m$fitted.values, h=24) ,shadecols="oldstyle", main="TSLA Stock Non-Linear Model Forcast", xlab="Year", ylab="Log-Adjusted Closing Price (in $)", lwd=2, col=1, ylim=c(2.75, 6))
 lines(ltsla_ts,lwd=2, col=2)
 legend('bottomright', legend=c( "Model+Forcast","Actual Value"), col=1:2, lwd=2)
 ```
 
+##\n\n
 
+### Modeling and Forecasting Seasonality
+
+#### Initial Data Exploration
 
 ```{r results='hold',message=FALSE}
 
