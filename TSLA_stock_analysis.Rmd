@@ -157,13 +157,13 @@ ggsubseriesplot(tsla_ts ,ylab="Adjusted Closing Price (in $)", xlab="Week") +
 ggseasonplot(tsla_ts ,ylab="Adjusted Closing Price (in $)", xlab="Week") +
   ggtitle("TSLA Stock(w/ ggsubseriesplot()")
 stl(tsla_ts,s.window=52) %>% autoplot() +
-  ggtitle("STL decomposition of Candian Gas Price")
+  ggtitle("STL decomposition of Tesla Stock Prices")
 ```
 """
 
 TODO: - Comfirm we did 2.a and 2.b correctly
 """
-The interpretation of this coefficient plot heavily suggests a pattern in stock price growth; a face-value analysis shows us that prices growth during the first half of each year (weeks 0-26) and then drop abruptly in the second half of the year. A continuation of this plot, however, into the next year, would suggest that growth occurs between ~week 30 of year i and week 30 of year i+1. Overall, the plot suggests a clear upward trend for Tesla stock prices.
+The interpretation of this coefficient plot heavily suggests a pattern in stock price growth; a face-value analysis shows us that prices growth during the first half of each year (weeks 0-26) and then drop abruptly in the second half of the year. A continuation of this plot, however, into the next year, would suggest that growth occurs between ~week 30 of year i and week 30 of year i+1. Overall, the plot suggests a clear seasonal component where prices rise over ~60 weeks before falling again.
 
 ##\n\n
 
@@ -187,7 +187,7 @@ TODO: - do word answers for 2.b, 2.c and 2.d
       - if confidence intervals are missing below, Add them!
 
 """
-An observation of the fitted values compared to their residuals demonstrates a periodic trend, roughly equivalent to a sine wave, suggesting that the nonlinear model combined with the seasonal component has not entirely identified the stochastic trend that determines Tesla stock prices.
+An observation of the fitted values compared to their residuals demonstrates a periodic trend, roughly equivalent to a sine wave, and that the residuals still contain structure. This suggests that the nonlinear model combined with the seasonal component has not entirely eliminated the stochastic trend, or the presence of cycles might still be influencing the residuals.
 
 ##\n\n
 
