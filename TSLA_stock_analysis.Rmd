@@ -1,6 +1,6 @@
 ---
 title: "Econ144 Project1"
-author: "Aditya Gorla"
+author: "Aditya Gorla, Vincent Chenneveau, Georges Ip, Filip Karasovsky"
 date: "4/24/2019"
 output: html_document
 ---
@@ -74,14 +74,13 @@ tsdisplay(tsla_ts, main="TSLA Stock", xlab="Year", ylab="Adjusted Closing Price 
 
 #### Initial Model building
 ```{r results='hold',message=FALSE}
-# linear model
-lin_m<- dynlm(tsla_ts ~ t)
+# Part d
+lin_m<- dynlm(tsla_ts ~ t) # linear model
 plot(tsla_ts,lwd=2, col=1, main="TSLA Stock Linear Model Fit", xlab="Year", ylab="Adjusted Closing Price (in $)")
 lines(lin_m$fitted.values ,col=2,lwd=2)
 legend('bottomright', legend=c("Actual Value", "Linear Model Fit"), col=1:2, lwd=2)
 
-# non-linear model
-nl_m<- dynlm(ltsla_ts ~ t + t2 + t3)
+nl_m<- dynlm(ltsla_ts ~ t + t2 + t3)# non-linear model
 plot(ltsla_ts,lwd=2, col="black", main="TSLA Stock Non-Linear Model Fit", xlab="Year", ylab="Log-Adjusted Closing Price (in $)")
 lines(nl_m$fitted.values,col='blue3',lwd=2)
 legend('bottomright', legend=c("Actual Value", "Non-Linear Model Fit"), col=c("black", "blue3"),lwd=2)
@@ -91,7 +90,7 @@ legend('bottomright', legend=c("Actual Value", "Non-Linear Model Fit"), col=c("b
 
 #### Initial Model Diagnostics and Selection
 ```{r results='hold',message=FALSE}
-
+#Part e,f,g, and h
 # linear model
 plot(y=lin_m$residuals, x=lin_m$fitted.values,lwd=2, col=1, main="TSLA Linear Model", xlab="Fitted Values", ylab="Residuals")
 truehist(lin_m$residuals,col='gray80',main="TSLA Linear Model", ylab="Fraction", xlab="Residuals")
@@ -136,6 +135,7 @@ For AIC, the linear model has a value of 4794, but the non linear model has a mu
 #### Non-Linear Model Forecast
 We are going to do a 24-steps forecast using our Non-Linear model above. This should predict the weekly Tesla adjusted closing price for the next 6 months.
 ```{r results='hold',message=FALSE}
+#Part i
 plot(predict(nl_m$fitted.values, h=24) ,shadecols="oldstyle", main="TSLA Stock Non-Linear Model Forecast", xlab="Year", ylab="Log-Adjusted Closing Price (in $)", lwd=2, col=1, ylim=c(2.75, 6))
 lines(ltsla_ts,lwd=2, col=2)
 legend('bottomright', legend=c( "Model+Forecast","Actual Value"), col=1:2, lwd=2)
