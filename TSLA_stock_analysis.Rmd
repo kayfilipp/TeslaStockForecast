@@ -31,11 +31,14 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ### Introduction
-With the recent developments in electric car technology as well as battery research, companies who entered the game early should have been able to capitalize on these factors. One of the first companies that come to mind would be Tesla. Companies closely associated with Tesla have been making headlines in recent years as well, such as SpaceX and the Boring Company. We wanted to look at these recent developments and see if this stock is promising.
+Over the past few years developments in electric car technology and batteries have sky-rocketed.Tesla is a company that aims to be at the forefront of these technological advancements.Their first mover advantage into many industries such as SpaceX and the Boring Company has made them the headlines.Tesla has gained noteriety for its erratic CEO who has smoked weed on live broadcast and shot his car into space. Will Tesla maintain its status in the eyes of the public or will an overpaid CEO leave to much room for entrants and lose their competitive advantage? The public loves Tesla but Wall Street does not love an unpredictable CEO. Investigating the stock price of Tesla will give us an idea of where its headed in the future.
+
+
+
 
 ##\n\n
 
-We chose to model and forecast the weekly adjusted closing price of Tesla stock over a 9 year period. We chose weekly data over daily data to avoid short term noise in higher frequency trading, as well as to accurate measure trend and seasonality.
+We chose to model and forecast the weekly adjusted closing price of Tesla stock over a 9 year period. We chose weekly data over daily data to avoid short term noise in higher frequency trading, as well as to make accurate trend and seasonality measures.
 
 
 ##\n\n
@@ -149,7 +152,7 @@ legend('bottomright', legend=c( "Model+Forecast","Actual Value"), col=1:2, lwd=2
 ```{r results='hold',message=FALSE}
 seas_m=tslm(tsla_ts~season+0)
 summary(seas_m)
-plot(seas_m$coefficients, xlab="Week", ylab="Co-effecient Value",main="Seasonality Models Weights", type="o",lwd=2)
+plot(seas_m$coefficients, xlab="Week", ylab="Co-effecient Value",main="Estimated Seasonal Factors", type="o",lwd=2)
 
 #Some seasonal decompositions to better understand seasonality
 ggsubseriesplot(tsla_ts ,ylab="Adjusted Closing Price (in $)", xlab="Week") +
@@ -163,7 +166,7 @@ stl(tsla_ts,s.window=52) %>% autoplot() +
 
 TODO: - Comfirm we did 2.a and 2.b correctly
 """
-The interpretation of this coefficient plot heavily suggests a pattern in stock price growth; a face-value analysis shows us that prices growth during the first half of each year (weeks 0-26) and then drop abruptly in the second half of the year. A continuation of this plot, however, into the next year, would suggest that growth occurs between ~week 30 of year i and week 30 of year i+1. Overall, the plot suggests a clear seasonal component where prices rise over ~60 weeks before falling again.
+The interpretation of this coefficient plot heavily suggests a pattern in stock price growth; a face-value analysis shows there is growth during the first half of each year (weeks 0-26) which then falls in the second half of the year. A continuation of this plot, however, into the next year, would suggest that growth occurs between ~week 30 of year i and week 30 of year i+1. Overall, the plot suggests a clear seasonal component where prices rise over ~60 weeks before falling again.
 
 ##\n\n
 
@@ -179,6 +182,8 @@ legend('bottomright', legend=c("Actual Value", "Full Model Fit"), col=1:2, lwd=2
 plot(y=full_m$residuals,x=full_m$fitted.values,ylab="Residuals",xlab="fitted values", main="TSLA Full Model")
 truehist(full_m$residuals,col='gray80',main="TSLA Full Model", ylab="Fraction", xlab="Residuals")
 summary(full_m)
+AIC(full_m)
+BIC(full_m)
 ```
 
 """
@@ -187,11 +192,11 @@ TODO: - do word answers for 2.b, 2.c and 2.d
       - if confidence intervals are missing below, Add them!
 
 """
-An observation of the fitted values compared to their residuals demonstrates a periodic trend, roughly equivalent to a sine wave, and that the residuals still contain structure. This suggests that the nonlinear model combined with the seasonal component has not entirely eliminated the stochastic trend, or the presence of cycles might still be influencing the residuals.
+The TSLA full model residuals still contain structure, demonstrating a periodic trend, roughly equivalent to a sine wave. This tells us that the nonlinear model combined with the seasonal component is not suffcient to strip away the series to only a stochastic process.The presence of cycles must still be influencing the residuals to create the residual plot seen.
 
 ##\n\n
 
-The overall adjusted R-squared is 0.9952. This indicates that a high percentage of variation in Tesla stock prices are explained by our model. All the coefficients are statistically significant at the 95% confidence level. The F-statistic also allows us to reject the null that the overall model is not significant.
+The overall adjusted R-squared is 0.9952. This indicates that a high percentage of variation in Tesla stock prices are explained by our model. All the coefficients are statistically significant at the 95% confidence level. The F-statistic 1723 on 55 and 406 Degrees of freedom with a p-value much smaller than 1, allows us to reject the null that the overall model is not significant. The AIC and BIC of the full model pose an issue because both results are greater than AIC and BIC for the nonlinear trend alone which suggest our full model is weaker.
 
 ##\n\n
 
