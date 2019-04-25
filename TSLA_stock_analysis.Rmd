@@ -188,8 +188,8 @@ legend('bottomright', legend=c("Actual Value", "Full Model Fit"), col=1:2, lwd=2
 plot(y=full_m$residuals,x=full_m$fitted.values,ylab="Residuals",xlab="fitted values", main="TSLA Full Model")
 truehist(full_m$residuals,col='gray80',main="TSLA Full Model", ylab="Fraction", xlab="Residuals")
 summary(full_m)
-AIC(full_m)
-BIC(full_m)
+AIC(nl_m, full_m)
+BIC(nl_m, full_m)
 ```
 
 """
