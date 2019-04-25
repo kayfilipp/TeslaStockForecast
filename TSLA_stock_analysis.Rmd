@@ -108,7 +108,10 @@ BIC(lin_m,nl_m)
 
 TODO: Analyze the above plots and answer 1.e, 1.f, 1.g and 1.h
 
-NOTE: the scale for the residulas are vastly differnt!
+Overall, the AIC/BIC suggests that the nonlinear model is better than the linear model with regards to forecasting strength.
+Residuals seem to behave uniformly in both models, with slightly more spread in the nonlinear model. Residuals for the linear
+model seem to follow a relatively normal distribution while nonlinear residuals, as dictated by the histograms, display prominent
+spikes on either side of the mode, suggesting the distribution is not unimodal.
 
 """
 
