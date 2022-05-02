@@ -8,4 +8,4 @@ In this paper, students from the UCLA Time Series Analysis class conducted a pre
 Part of the modeling process involved building out several models as baselines - specifically, a linear and nonlinear model, neither of which included any STL decomposition.
 
 <h2><b>Final STL Model </b></h2>
-![image](https://user-images.githubusercontent.com/36943200/166328411-cadcb418-48b3-460b-8da2-7affa5778fd0.png)
+<img src=https://user-images.githubusercontent.com/36943200/166328411-cadcb418-48b3-460b-8da2-7affa5778fd0.png>
