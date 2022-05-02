@@ -9,3 +9,9 @@ Part of the modeling process involved building out several models as baselines -
 
 <h2><b>Final STL Model </b></h2>
 <img src=https://user-images.githubusercontent.com/36943200/166328411-cadcb418-48b3-460b-8da2-7affa5778fd0.png>
+
+<h2> Residuals: </h2>
+<img src=https://user-images.githubusercontent.com/36943200/166329246-adf032b2-d857-401f-9327-42c07f324647.png>
+
+<h2><b>Conclusion</b></h2>
+<p>This project was meant to demonstrate that STL decomposition and nonlinear/linear modeling alone is generally unreliable at producing residuals that do not exhibit a signal or structure for stock prices, and was part of a further attempt to integrate ARMA modeling into our analysis moving forward.</p>
